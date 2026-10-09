@@ -8,59 +8,61 @@ package web_3laba;
  *
  * @author masha
  */
+public class MountainRiver extends River{
+    private double slope;            /* РЈРєР»РѕРЅ СЂСѓСЃР»Р° - РЅР° СЃРєРѕР»СЊРєРѕ РјРµС‚СЂРѕРІ СЂРµРєР° 
+                                        РѕРїСѓСЃРєР°РµС‚СЃСЏ РЅР° 1 РєРј РґР»РёРЅС‹*/
+    private int rapidsCount;        /* РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕСЂРѕРіРѕРІ вЂ” СѓС‡Р°СЃС‚РєРѕРІ СЃ Р±СѓСЂРЅС‹Рј  
+                                        С‚РµС‡РµРЅРёРµРј Рё РєР°РјРЅСЏРјРё */
+    private double waterfallHeight;  /* Р’С‹СЃРѕС‚Р° РІРѕРґРѕРїР°РґР°, Рј (РµСЃР»Рё РµСЃС‚СЊ РЅР° СЂРµРєРµ)
+                                        Р•СЃР»Рё 0 вЂ” РІРѕРґРѕРїР°РґРѕРІ РЅРµС‚.*/
+    private String rockType;        /*РџСЂРµРѕР±Р»Р°РґР°СЋС‰Р°СЏ РїРѕСЂРѕРґР° РІ СЂСѓСЃР»Рµ: "РіСЂР°РЅРёС‚", 
+                                        "Р±Р°Р·Р°Р»СЊС‚", "РёР·РІРµСЃС‚РЅСЏРє"*/
+    private double temperature;      // РЎСЂРµРґРЅСЏСЏ С‚РµРјРїРµСЂР°С‚СѓСЂР°, В°C
 
-// Класс приток 
-public class Tributary extends River{
-private River mainRiver;         /* Главная река, в которую впадает приток */
-    private double confluencePoint;  /* Точка впадения — км от устья главной реки */
-    private int order;               /* Порядок притока: 1-й, 2-й и т.д. */
-    private double basinArea;        /* Площадь водосбора, км? */
-    private boolean seasonal;        /* Сезонный ли приток (пересыхает зимой) */
-
-    public Tributary(String name, double length, double width,
-                     double depth, double velocity,
-                     River mainRiver, double confluencePoint,
-                     int order, double basinArea, boolean seasonal) {
+    public MountainRiver(String name, double length, double width,
+                         double depth, double velocity,
+                         double slope, int rapidsCount,
+                         double waterfallHeight, String rockType,
+                         double temperature) {
         super(name, length, width, depth, velocity);
-        this.mainRiver = mainRiver;
-        this.confluencePoint = confluencePoint;
-        this.order = order;
-        this.basinArea = basinArea;
-        this.seasonal = seasonal;
+        this.slope = slope;
+        this.rapidsCount = rapidsCount;
+        this.waterfallHeight = waterfallHeight;
+        this.rockType = rockType;
+        this.temperature = temperature;
     }
-
-    // Влияние притока на главную реку (доля объёма главной реки)
-    public double impactOnMain() {
-        return volume() / mainRiver.volume();
+    
+    //С‚СѓСЂР±СѓР»РµРЅС‚РЅРѕСЃС‚СЊ
+    public double turbulence() {
+        return getVelocity() * slope;
     }
-
-    // Временный ли приток (сезонный)
-    public boolean isTemporary() {
-        return seasonal;
+    
+    //РїСЂРёРіРѕРґРЅР° Р»Рё РґР»СЏ СЃРїР»Р°РІР°
+    public boolean isRaftable() {
+        return turbulence() > 5 && rapidsCount > 0;
     }
 
     @Override
     public String info() {
         return super.info() + String.format(
-                "%nПриток %d-го порядка ? %s (%.0f км от устья), " +
-                "бассейн=%.0f квадратных км, сезонный=%s",
-                order, mainRiver.getName(), confluencePoint,
-                basinArea, seasonal ? "да" : "нет");
+                "%nР“РѕСЂРЅР°СЏ: СѓРєР»РѕРЅ=%.1fвЂ°, РїРѕСЂРѕРіРѕРІ=%d, T=%.1fВ°C, СЃРїР»Р°РІ=%s",
+                slope, rapidsCount, temperature, isRaftable() ? "РґР°" : "РЅРµС‚");
     }
 
-    // Геттеры/сеттеры
-    public River getMainRiver() { return mainRiver; }
-    public void setMainRiver(River mainRiver) { this.mainRiver = mainRiver; }
+    //Р“РµС‚С‚РµСЂС‹/СЃРµС‚С‚РµСЂС‹
+    public double getSlope() { return slope; }
+    public void setSlope(double slope) { this.slope = slope; }
 
-    public double getConfluencePoint() { return confluencePoint; }
-    public void setConfluencePoint(double confluencePoint) { this.confluencePoint = confluencePoint; }
+    public int getRapidsCount() { return rapidsCount; }
+    public void setRapidsCount(int rapidsCount) { this.rapidsCount = rapidsCount; }
 
-    public int getOrder() { return order; }
-    public void setOrder(int order) { this.order = order; }
+    public double getWaterfallHeight() { return waterfallHeight; }
+    public void setWaterfallHeight(double waterfallHeight) { this.waterfallHeight = waterfallHeight; }
 
-    public double getBasinArea() { return basinArea; }
-    public void setBasinArea(double basinArea) { this.basinArea = basinArea; }
+    public String getRockType() { return rockType; }
+    public void setRockType(String rockType) { this.rockType = rockType; }
 
-    public boolean isSeasonal() { return seasonal; }
-    public void setSeasonal(boolean seasonal) { this.seasonal = seasonal; }
+    public double getTemperature() { return temperature; }
+    public void setTemperature(double temperature) { this.temperature = temperature; }
 }
+

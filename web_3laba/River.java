@@ -10,10 +10,10 @@ package web_3laba;
  */
 public class River {
     private String name;
-    private double length; //длина, км
-    private double width; //средняя ширина, м
-    private double depth; //средняя глубина, м
-    private double velocity; //скорость течения, м/с
+    private double length; //РґР»РёРЅР°, РєРј
+    private double width; //СЃСЂРµРґРЅСЏСЏ С€РёСЂРёРЅР°, Рј
+    private double depth; //СЃСЂРµРґРЅСЏСЏ РіР»СѓР±РёРЅР°, Рј
+    private double velocity; //СЃРєРѕСЂРѕСЃС‚СЊ С‚РµС‡РµРЅРёСЏ, Рј/СЃ
     
     public River(String name, double length, double width, double depth, double velocity){
         this.name = name;
@@ -23,23 +23,23 @@ public class River {
         this.velocity = velocity;
     };
     
-    //объем воды в русле
+    //РѕР±СЉРµРј РІРѕРґС‹ РІ СЂСѓСЃР»Рµ
     public double volume() {
-    return length * 1000 * width * depth;  //м?
+    return length * 1000 * width * depth;  //Рј?
 }
     
     public String getCategory() {
-        if (length > 1000) return "крупная";
-        if (length > 200)  return "средняя";
-        return "малая";
+        if (length > 1000) return "РєСЂСѓРїРЅР°СЏ";
+        if (length > 200)  return "СЃСЂРµРґРЅСЏСЏ";
+        return "РјР°Р»Р°СЏ";
     }
     
     public String info() {
-    return String.format("Река %s: L=%.1f км, W=%.1f м, D=%.1f м, V=%.0f кубометров, категория: %s",
+    return String.format("Р РµРєР° %s: L=%.1f РєРј, W=%.1f Рј, D=%.1f Рј, V=%.0f РєСѓР±РѕРјРµС‚СЂРѕРІ, РєР°С‚РµРіРѕСЂРёСЏ: %s",
             name, length, width, depth,  volume(), getCategory());
 }
     
-    //Геттеры/сеттеры
+    //Р“РµС‚С‚РµСЂС‹/СЃРµС‚С‚РµСЂС‹
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

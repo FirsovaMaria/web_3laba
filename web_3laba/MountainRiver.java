@@ -1,68 +1,141 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package web_3laba;
 
-/**
- *
- * @author masha
- */
-public class MountainRiver extends River{
-    private double slope;            /* Уклон русла - на сколько метров река 
-                                        опускается на 1 км длины*/
-    private int rapidsCount;        /* Количество порогов — участков с бурным  
-                                        течением и камнями */
-    private double waterfallHeight;  /* Высота водопада, м (если есть на реке)
-                                        Если 0 — водопадов нет.*/
-    private String rockType;        /*Преобладающая порода в русле: "гранит", 
-                                        "базальт", "известняк"*/
-    private double temperature;      // Средняя температура, °C
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
 
-    public MountainRiver(String name, double length, double width,
-                         double depth, double velocity,
-                         double slope, int rapidsCount,
-                         double waterfallHeight, String rockType,
-                         double temperature) {
-        super(name, length, width, depth, velocity);
-        this.slope = slope;
-        this.rapidsCount = rapidsCount;
-        this.waterfallHeight = waterfallHeight;
-        this.rockType = rockType;
-        this.temperature = temperature;
-    }
-    
-    //турбулентность
-    public double turbulence() {
-        return getVelocity() * slope;
-    }
-    
-    //пригодна ли для сплава
-    public boolean isRaftable() {
-        return turbulence() > 5 && rapidsCount > 0;
+public class Web_3laba {
+
+    static Scanner sc = new Scanner(System.in, "UTF-8");
+
+    static String readString(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim();
+            if (!s.isEmpty()) return s;
+            System.out.println("РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°. РџРѕРІС‚РѕСЂРёС‚Рµ.");
+        }
     }
 
-    @Override
-    public String info() {
-        return super.info() + String.format(
-                "%nГорная: уклон=%.1f‰, порогов=%d, T=%.1f°C, сплав=%s",
-                slope, rapidsCount, temperature, isRaftable() ? "да" : "нет");
+    static double readPositiveDouble(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim().replace(',', '.');
+            try {
+                double v = Double.parseDouble(s);
+                if (v <= 0) {
+                    System.out.println("Р”РѕР»Р¶РЅРѕ Р±С‹С‚СЊ > 0.");
+                    continue;
+                }
+                return v;
+            } catch (NumberFormatException e) {
+                System.out.println("Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ.");
+            }
+        }
     }
 
-    //Геттеры/сеттеры
-    public double getSlope() { return slope; }
-    public void setSlope(double slope) { this.slope = slope; }
+    static int readPositiveInt(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim();
+            try {
+                int v = Integer.parseInt(s);
+                if (v <= 0) {
+                    System.out.println("Р”РѕР»Р¶РЅРѕ Р±С‹С‚СЊ > 0.");
+                    continue;
+                }
+                return v;
+            } catch (NumberFormatException e) {
+                System.out.println("Р’РІРµРґРёС‚Рµ С†РµР»РѕРµ С‡РёСЃР»Рѕ.");
+            }
+        }
+    }
 
-    public int getRapidsCount() { return rapidsCount; }
-    public void setRapidsCount(int rapidsCount) { this.rapidsCount = rapidsCount; }
+    //Р’РІРѕРґ РЅРѕРјРµСЂР° РёР· СЃРїРёСЃРєР°
+    static int readIndex(String prompt, int size) {
+        while (true) {
+            System.out.print(prompt);
+            String s = sc.nextLine().trim();
+            try {
+                int idx = Integer.parseInt(s);
+                if (idx < 1 || idx > size) {
+                    System.out.printf("Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ %d.%n", size);
+                    continue;
+                }
+                return idx - 1;
+            } catch (NumberFormatException e) {
+                System.out.println("Р’РІРµРґРёС‚Рµ С†РµР»РѕРµ С‡РёСЃР»Рѕ.");
+            }
+        }
+    }
 
-    public double getWaterfallHeight() { return waterfallHeight; }
-    public void setWaterfallHeight(double waterfallHeight) { this.waterfallHeight = waterfallHeight; }
+    //РџРµС‡Р°С‚СЊ СЃРїРёСЃРєР° СЃ РЅРѕРјРµСЂР°РјРё
+    static void printNumbered(River[] rivers) {
+        for (int i = 0; i < rivers.length; i++) {
+            System.out.printf("  %d) %s (%.1f РєРј)%n",
+                    i + 1, rivers[i].getName(), rivers[i].getLength());
+        }
+    }
 
-    public String getRockType() { return rockType; }
-    public void setRockType(String rockType) { this.rockType = rockType; }
+    public static void main(String[] args) {
 
-    public double getTemperature() { return temperature; }
-    public void setTemperature(double temperature) { this.temperature = temperature; }
+        int n = readPositiveInt("РЎРєРѕР»СЊРєРѕ СЂРµРє РІРІРµСЃС‚Рё? ");
+        River[] rivers = new River[n];
+
+        //Р’РІРѕРґ
+        for (int i = 0; i < n; i++) {
+            System.out.println("\n--- Р РµРєР° #" + (i + 1) + " ---");
+            String name = readString("РќР°Р·РІР°РЅРёРµ: ");
+            double length = readPositiveDouble("Р”Р»РёРЅР° (РєРј): ");
+            double width = readPositiveDouble("РЁРёСЂРёРЅР° (Рј): ");
+            double depth = readPositiveDouble("Р“Р»СѓР±РёРЅР° (Рј): ");
+            double velocity = readPositiveDouble("РЎРєРѕСЂРѕСЃС‚СЊ (Рј/СЃ): ");
+
+            rivers[i] = new River(name, length, width, depth, velocity);
+            System.out.println("Р”РѕР±Р°РІР»РµРЅРѕ.");
+        }
+
+        //РЎР°РјР°СЏ РєРѕСЂРѕС‚РєР°СЏ
+        River min = rivers[0];
+        for (River r : rivers) if (r.getLength() < min.getLength()) min = r;
+        System.out.println("\n1) РЎР°РјР°СЏ РєРѕСЂРѕС‚РєР°СЏ СЂРµРєР°:");
+        System.out.println(min.info());
+
+        //Р”Р»РёРЅРЅРµРµ СЃСЂРµРґРЅРµР№
+        double sum = 0;
+        for (River r : rivers) sum += r.getLength();
+        double avg = sum / n;
+        System.out.printf("%n2) РЎСЂРµРґРЅСЏСЏ РґР»РёРЅР° = %.1f РєРј. Р”Р»РёРЅРЅРµРµ:%n", avg);
+        boolean any = false;
+        for (River r : rivers) {
+            if (r.getLength() > avg) {
+                System.out.println(r.info());
+                any = true;
+            }
+        }
+        if (!any) System.out.println("  (РЅРµС‚ С‚Р°РєРёС…)");
+
+        //РџРѕ Р°Р»С„Р°РІРёС‚Сѓ
+        Arrays.sort(rivers, Comparator.comparing(River::getName));
+        System.out.println("\n3) РџРѕ Р°Р»С„Р°РІРёС‚Сѓ:");
+        for (River r : rivers) System.out.println(r.info());
+
+        // Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕ РЅРѕРјРµСЂСѓ
+        System.out.println("\n4) Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ вЂ” РІС‹Р±РµСЂРёС‚Рµ СЂРµРєСѓ РїРѕ РЅРѕРјРµСЂСѓ:");
+        printNumbered(rivers);
+
+        int idx = readIndex("РќРѕРјРµСЂ: ", rivers.length);
+        River found = rivers[idx];
+
+        System.out.println("\nР’С‹Р±СЂР°РЅР° СЂРµРєР°:");
+        System.out.println(found.info());
+
+        double newLength = readPositiveDouble("\nРќРѕРІР°СЏ РґР»РёРЅР° (РєРј): ");
+        found.setLength(newLength);
+
+        System.out.println("\nРџРѕСЃР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ:");
+        System.out.println(found.info());
+
+        sc.close();
+    }
 }
-

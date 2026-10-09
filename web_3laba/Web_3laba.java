@@ -13,7 +13,7 @@ public class Web_3laba {
             System.out.print(prompt);
             String s = sc.nextLine().trim();
             if (!s.isEmpty()) return s;
-            System.out.println("Пустая строка. Повторите.");
+            System.out.println("РџСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°. РџРѕРІС‚РѕСЂРёС‚Рµ.");
         }
     }
 
@@ -24,12 +24,12 @@ public class Web_3laba {
             try {
                 double v = Double.parseDouble(s);
                 if (v <= 0) {
-                    System.out.println("Должно быть > 0.");
+                    System.out.println("Р”РѕР»Р¶РЅРѕ Р±С‹С‚СЊ > 0.");
                     continue;
                 }
                 return v;
             } catch (NumberFormatException e) {
-                System.out.println("Введите число.");
+                System.out.println("Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ.");
             }
         }
     }
@@ -41,17 +41,17 @@ public class Web_3laba {
             try {
                 int v = Integer.parseInt(s);
                 if (v <= 0) {
-                    System.out.println("Должно быть > 0.");
+                    System.out.println("Р”РѕР»Р¶РЅРѕ Р±С‹С‚СЊ > 0.");
                     continue;
                 }
                 return v;
             } catch (NumberFormatException e) {
-                System.out.println("Введите целое число.");
+                System.out.println("Р’РІРµРґРёС‚Рµ С†РµР»РѕРµ С‡РёСЃР»Рѕ.");
             }
         }
     }
 
-    //Ввод номера из списка
+    //Р’РІРѕРґ РЅРѕРјРµСЂР° РёР· СЃРїРёСЃРєР°
     static int readIndex(String prompt, int size) {
         while (true) {
             System.out.print(prompt);
@@ -59,53 +59,53 @@ public class Web_3laba {
             try {
                 int idx = Integer.parseInt(s);
                 if (idx < 1 || idx > size) {
-                    System.out.printf("Введите число от 1 до %d.%n", size);
+                    System.out.printf("Р’РІРµРґРёС‚Рµ С‡РёСЃР»Рѕ РѕС‚ 1 РґРѕ %d.%n", size);
                     continue;
                 }
                 return idx - 1;
             } catch (NumberFormatException e) {
-                System.out.println("Введите целое число.");
+                System.out.println("Р’РІРµРґРёС‚Рµ С†РµР»РѕРµ С‡РёСЃР»Рѕ.");
             }
         }
     }
 
-    //Печать списка с номерами
+    //РџРµС‡Р°С‚СЊ СЃРїРёСЃРєР° СЃ РЅРѕРјРµСЂР°РјРё
     static void printNumbered(River[] rivers) {
         for (int i = 0; i < rivers.length; i++) {
-            System.out.printf("  %d) %s (%.1f км)%n",
+            System.out.printf("  %d) %s (%.1f РєРј)%n",
                     i + 1, rivers[i].getName(), rivers[i].getLength());
         }
     }
 
     public static void main(String[] args) {
 
-        int n = readPositiveInt("Сколько рек ввести? ");
+        int n = readPositiveInt("РЎРєРѕР»СЊРєРѕ СЂРµРє РІРІРµСЃС‚Рё? ");
         River[] rivers = new River[n];
 
-        //Ввод
+        //Р’РІРѕРґ
         for (int i = 0; i < n; i++) {
-            System.out.println("\n--- Река #" + (i + 1) + " ---");
-            String name = readString("Название: ");
-            double length = readPositiveDouble("Длина (км): ");
-            double width = readPositiveDouble("Ширина (м): ");
-            double depth = readPositiveDouble("Глубина (м): ");
-            double velocity = readPositiveDouble("Скорость (м/с): ");
+            System.out.println("\n--- Р РµРєР° #" + (i + 1) + " ---");
+            String name = readString("РќР°Р·РІР°РЅРёРµ: ");
+            double length = readPositiveDouble("Р”Р»РёРЅР° (РєРј): ");
+            double width = readPositiveDouble("РЁРёСЂРёРЅР° (Рј): ");
+            double depth = readPositiveDouble("Р“Р»СѓР±РёРЅР° (Рј): ");
+            double velocity = readPositiveDouble("РЎРєРѕСЂРѕСЃС‚СЊ (Рј/СЃ): ");
 
             rivers[i] = new River(name, length, width, depth, velocity);
-            System.out.println("Добавлено.");
+            System.out.println("Р”РѕР±Р°РІР»РµРЅРѕ.");
         }
 
-        //Самая короткая
+        //РЎР°РјР°СЏ РєРѕСЂРѕС‚РєР°СЏ
         River min = rivers[0];
         for (River r : rivers) if (r.getLength() < min.getLength()) min = r;
-        System.out.println("\n1) Самая короткая река:");
+        System.out.println("\n1) РЎР°РјР°СЏ РєРѕСЂРѕС‚РєР°СЏ СЂРµРєР°:");
         System.out.println(min.info());
 
-        //Длиннее средней
+        //Р”Р»РёРЅРЅРµРµ СЃСЂРµРґРЅРµР№
         double sum = 0;
         for (River r : rivers) sum += r.getLength();
         double avg = sum / n;
-        System.out.printf("%n2) Средняя длина = %.1f км. Длиннее:%n", avg);
+        System.out.printf("%n2) РЎСЂРµРґРЅСЏСЏ РґР»РёРЅР° = %.1f РєРј. Р”Р»РёРЅРЅРµРµ:%n", avg);
         boolean any = false;
         for (River r : rivers) {
             if (r.getLength() > avg) {
@@ -113,27 +113,27 @@ public class Web_3laba {
                 any = true;
             }
         }
-        if (!any) System.out.println("  (нет таких)");
+        if (!any) System.out.println("  (РЅРµС‚ С‚Р°РєРёС…)");
 
-        //По алфавиту
+        //РџРѕ Р°Р»С„Р°РІРёС‚Сѓ
         Arrays.sort(rivers, Comparator.comparing(River::getName));
-        System.out.println("\n3) По алфавиту:");
+        System.out.println("\n3) РџРѕ Р°Р»С„Р°РІРёС‚Сѓ:");
         for (River r : rivers) System.out.println(r.info());
 
-        // Редактирование по номеру
-        System.out.println("\n4) Редактирование — выберите реку по номеру:");
+        // Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕ РЅРѕРјРµСЂСѓ
+        System.out.println("\n4) Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ вЂ” РІС‹Р±РµСЂРёС‚Рµ СЂРµРєСѓ РїРѕ РЅРѕРјРµСЂСѓ:");
         printNumbered(rivers);
 
-        int idx = readIndex("Номер: ", rivers.length);
+        int idx = readIndex("РќРѕРјРµСЂ: ", rivers.length);
         River found = rivers[idx];
 
-        System.out.println("\nВыбрана река:");
+        System.out.println("\nР’С‹Р±СЂР°РЅР° СЂРµРєР°:");
         System.out.println(found.info());
 
-        double newLength = readPositiveDouble("\nНовая длина (км): ");
+        double newLength = readPositiveDouble("\nРќРѕРІР°СЏ РґР»РёРЅР° (РєРј): ");
         found.setLength(newLength);
 
-        System.out.println("\nПосле редактирования:");
+        System.out.println("\nРџРѕСЃР»Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ:");
         System.out.println(found.info());
 
         sc.close();

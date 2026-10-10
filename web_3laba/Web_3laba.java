@@ -12,7 +12,9 @@ public class Web_3laba {
         while (true) {
             System.out.print(prompt);
             String s = sc.nextLine().trim();
-            if (!s.isEmpty()) return s;
+            if (!s.isEmpty()) {
+                return s;
+            }
             System.out.println("Пустая строка. Повторите.");
         }
     }
@@ -40,8 +42,8 @@ public class Web_3laba {
             String s = sc.nextLine().trim();
             try {
                 int v = Integer.parseInt(s);
-                if (v <= 0) {
-                    System.out.println("Должно быть > 0.");
+                if (v < 0) {
+                    System.out.println("Должно быть >= 0.");
                     continue;
                 }
                 return v;
@@ -77,65 +79,81 @@ public class Web_3laba {
         }
     }
 
+    public static boolean isQuit(int input) {
+        return input == 0;
+    }
+
     public static void main(String[] args) {
 
-        int n = readPositiveInt("Сколько рек ввести? ");
-        River[] rivers = new River[n];
+        while (true) {
+            int n = readPositiveInt("Сколько рек ввести? ");
+            if (isQuit(n))break;
+            River[] rivers = new River[n];
 
-        //Ввод
-        for (int i = 0; i < n; i++) {
-            System.out.println("\n--- Река #" + (i + 1) + " ---");
-            String name = readString("Название: ");
-            double length = readPositiveDouble("Длина (км): ");
-            double width = readPositiveDouble("Ширина (м): ");
-            double depth = readPositiveDouble("Глубина (м): ");
-            double velocity = readPositiveDouble("Скорость (м/с): ");
+            //Ввод
+            for (int i = 0; i < n; i++) {
+                System.out.println("\nРека №" + (i + 1));
+                String name = readString("Название: ");
+                double length = readPositiveDouble("Длина (км): ");
+                double width = readPositiveDouble("Ширина (м): ");
+                double depth = readPositiveDouble("Глубина (м): ");
+                double velocity = readPositiveDouble("Скорость (м/с): ");
 
-            rivers[i] = new River(name, length, width, depth, velocity);
-            System.out.println("Добавлено.");
-        }
-
-        //Самая короткая
-        River min = rivers[0];
-        for (River r : rivers) if (r.getLength() < min.getLength()) min = r;
-        System.out.println("\n1) Самая короткая река:");
-        System.out.println(min.info());
-
-        //Длиннее средней
-        double sum = 0;
-        for (River r : rivers) sum += r.getLength();
-        double avg = sum / n;
-        System.out.printf("%n2) Средняя длина = %.1f км. Длиннее:%n", avg);
-        boolean any = false;
-        for (River r : rivers) {
-            if (r.getLength() > avg) {
-                System.out.println(r.info());
-                any = true;
+                rivers[i] = new River(name, length, width, depth, velocity);
+                System.out.println("Добавлено.");
             }
+
+            //Самая короткая
+            River min = rivers[0];
+            for (River r : rivers) {
+                if (r.getLength() < min.getLength()) {
+                    min = r;
+                }
+            }
+            System.out.println("\n1) Самая короткая река:");
+            System.out.println(min.info());
+
+            //Длиннее средней
+            double sum = 0;
+            for (River r : rivers) {
+                sum += r.getLength();
+            }
+            double avg = sum / n;
+            System.out.printf("%n2) Средняя длина = %.1f км. Длиннее:%n", avg);
+            boolean any = false;
+            for (River r : rivers) {
+                if (r.getLength() > avg) {
+                    System.out.println(r.info());
+                    any = true;
+                }
+            }
+            if (!any) {
+                System.out.println("  (нет таких)");
+            }
+
+            //По алфавиту
+            Arrays.sort(rivers, Comparator.comparing(River::getName));
+            System.out.println("\n3) По алфавиту:");
+            for (River r : rivers) {
+                System.out.println(r.info());
+            }
+
+            // Редактирование по номеру
+            System.out.println("\n4) Редактирование — выберите реку по номеру:");
+            printNumbered(rivers);
+
+            int idx = readIndex("Номер: ", rivers.length);
+            River found = rivers[idx];
+
+            System.out.println("\nВыбрана река:");
+            System.out.println(found.info());
+
+            double newLength = readPositiveDouble("\nНовая длина (км): ");
+            found.setLength(newLength);
+
+            System.out.println("\nПосле редактирования:");
+            System.out.println(found.info());
+            System.out.println();
         }
-        if (!any) System.out.println("  (нет таких)");
-
-        //По алфавиту
-        Arrays.sort(rivers, Comparator.comparing(River::getName));
-        System.out.println("\n3) По алфавиту:");
-        for (River r : rivers) System.out.println(r.info());
-
-        // Редактирование по номеру
-        System.out.println("\n4) Редактирование — выберите реку по номеру:");
-        printNumbered(rivers);
-
-        int idx = readIndex("Номер: ", rivers.length);
-        River found = rivers[idx];
-
-        System.out.println("\nВыбрана река:");
-        System.out.println(found.info());
-
-        double newLength = readPositiveDouble("\nНовая длина (км): ");
-        found.setLength(newLength);
-
-        System.out.println("\nПосле редактирования:");
-        System.out.println(found.info());
-
-        sc.close();
     }
 }

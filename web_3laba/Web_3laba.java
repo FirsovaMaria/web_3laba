@@ -1,14 +1,12 @@
 package web_3laba;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class Web_3laba {
 
     static Scanner sc = new Scanner(System.in, "UTF-8");
 
-    // ввод
+    //ввод
     static String readString(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -115,7 +113,16 @@ public class Web_3laba {
     }
 
     static void printSortedByName(River[] rivers) {
-        Arrays.sort(rivers, Comparator.comparing(River::getName, String.CASE_INSENSITIVE_ORDER));
+        for (int i = 0; i < rivers.length - 1; i++) {
+            for (int j = 0; j < rivers.length - 1 - i; j++) {
+                if (rivers[j].getName().compareToIgnoreCase(rivers[j + 1].getName()) > 0) {
+                    River temp = rivers[j];
+                    rivers[j] = rivers[j + 1];
+                    rivers[j + 1] = temp;
+                }
+            }
+        }
+
         System.out.println("\n3) По алфавиту:");
         for (River r : rivers) System.out.println(r.info());
     }
@@ -157,7 +164,6 @@ public class Web_3laba {
         System.out.println("\nПосле редактирования:");
         System.out.println(found.info());
     }
-
 
     public static void main(String[] args) {
         System.out.println("Пискарева и Фирсова, 3 лаба, 5 вариант - реки");

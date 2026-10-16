@@ -33,7 +33,7 @@ public class Web_3laba {
         }
     }
 
-    static int readInt(String prompt, int min, int max) {
+        static int readInt(String prompt, int min, int max) {
         while (true) {
             System.out.print(prompt);
             String s = sc.nextLine().trim();
@@ -65,7 +65,7 @@ public class Web_3laba {
         double length = readPositiveDouble("Длина (км): ");
         double width = readPositiveDouble("Ширина (м): ");
 
-        System.out.println("Тип реки: 1) Обычная  2) Горная  3) Приток");
+        System.out.println("Тип реки: 1) Обычная  2) Горная  3) Горный приток");
         int type = readInt("Тип: ", 1, 3);
 
         switch (type) {
@@ -74,9 +74,11 @@ public class Web_3laba {
                 int rapids = readInt("Количество порогов: ", 0, 1000);
                 return new MountainRiver(name, length, width, slope, rapids);
             case 3:
+                double slopeCount = readPositiveDouble("Уклон: ");
+                int rapidsCount = readInt("Количество порогов: ", 0, 1000);
                 String main = readString("В какую реку впадает: ");
                 boolean seasonal = readYesNo("Сезонный? (да/нет): ");
-                return new Tributary(name, length, width, main, seasonal);
+                return new Tributary(name, length, width, main, seasonal, slopeCount, rapidsCount);
             default:
                 return new River(name, length, width);
         }

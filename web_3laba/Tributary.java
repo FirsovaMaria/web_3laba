@@ -1,12 +1,12 @@
 package web_3laba;
 
-public class Tributary extends River {
+public class Tributary extends MountainRiver {
     private String mainRiverName; // река, в которую впадает приток
     private boolean seasonal;     // сезонный ли приток
 
     public Tributary(String name, double length, double width,
-                     String mainRiverName, boolean seasonal) {
-        super(name, length, width);
+                     String mainRiverName, boolean seasonal, double slope, int rapidsCount) {
+        super(name, length, width, slope, rapidsCount);
         this.mainRiverName = mainRiverName;
         this.seasonal = seasonal;
     }
